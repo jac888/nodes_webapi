@@ -1,0 +1,6 @@
+{
+  "name": "My Express WebAPI application - Production",
+  "mail": {
+    "host": "prod.ares.com.tw"
+  }
+}

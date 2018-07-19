@@ -14,6 +14,7 @@ const config = require("config");
 
 /* debugger area using environment variables to define different debug and enable / disable each senario */
 /* by using all: export DEBUG=* || export DEBUG=env,config || set to none */
+/* or start application by DEBUG=* nodemon idx.js */
 const envDebug = require("debug")("env");
 const configDebug = require("debug")("config");
 const codeDebug = require("debug")("code");

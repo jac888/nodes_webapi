@@ -1,35 +1,54 @@
-const Joi = require("joi"); //check webapi parameter schema
 const Exp = require("express"); //webapi framework
-const helmet = require("helmet");
-const morgan = require("morgan"); //logger for http requests showing on terminal
-//using middleware within a file
+const Joi = require("joi"); //check webapi parameter schema
+
+const helmet = require("helmet"); //???
+const morgan = require("morgan"); //showing logs for webapi http requests on terminal
+
+//using middleware within a file example
 const logger = require("./logger");
-//using middleware within a file
 const authenticate = require("./Authenticate");
+
+//npm config to seperate every different environment such as development and production settings in config/xxx.json
+//sensitive data must store in customer-environment-variables.json and set it via export/set.
 const config = require("config");
+
+/* debugger area using environment variables to define different debug and enable / disable each senario */
+/* by using all: export DEBUG=* || export DEBUG=env,config || set to none */
+const envDebug = require("debug")("env");
+const configDebug = require("debug")("config");
+const codeDebug = require("debug")("code");
+const dbDebug = require("debug")("db");
+const apiDebug = require("debug")("api");
 const app = Exp();
 
+//in express framework functions:
 app.use(Exp.json());
 //using urlencoded middleware enabled webapi in the body (x-www-form-urlencoded) with key/value pair
 //with extened: true and we can send array or more complex format
 app.use(Exp.urlencoded({ extended: true }));
 //http server can access static resource in local directory
 app.use(Exp.static("Public"));
+
+//??
 app.use(helmet());
 
-console.log("Application name : " + config.get("name"));
-console.log("Mail Host: " + config.get("mail.host"));
-console.log("Mail Username : " + config.get("mail.username"));
-console.log("Mail Password : " + config.get("mail.password"));
+//and replace console.log with every debug names
+configDebug("Application name : " + config.get("name"));
+configDebug("Mail Host: " + config.get("mail.host"));
+
+dbDebug("testing db connections....");
+
+//read sensitive data avoid from config json files! Instead of application environment variables.
+//(use export sets prefix! : app_password=xxxx)
+configDebug("Mail Username : " + config.get("mail.username"));
+configDebug("Mail Password : " + config.get("mail.password"));
+
 //only works within development enviroment
 if (app.get("env") === "development") {
-  console.log(`app: ${app.get("env")}`);
+  envDebug(`app: ${app.get("env")}`);
   app.use(morgan("tiny"));
-  console.log("morgan is enabled only on development env.");
+  envDebug("morgan is enabled only on development env.");
 }
-//using middleware within a file
-app.use(logger);
-app.use(authenticate);
 
 const Courses = [
   {
@@ -111,8 +130,8 @@ function validateCoursesForPut(Course) {
 
 app.get("/api/post/:year/:month", (req, res) => {
   res.send(req.params);
-  console.log(req.params.year);
-  console.log(req.params.month);
+  apiDebug(req.params.year);
+  apiDebug(req.params.month);
 });
 
 app.delete("/api/Course/:id", (req, res) => {
@@ -126,4 +145,4 @@ app.delete("/api/Course/:id", (req, res) => {
 });
 
 const port = process.env.Port || 3000;
-app.listen(port, () => console.log(`server listen on port ${port}...`));
+app.listen(port, () => codeDebug(`server listen on port ${port}...`));

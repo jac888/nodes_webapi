@@ -17,6 +17,7 @@ const configDebug = require("debug")("config");
 const codeDebug = require("debug")("code");
 const dbDebug = require("debug")("db");
 const courses = require("./routes/courses");
+const genres = require("./routes/genres");
 const home = require("./routes/home");
 const Express = require("express");
 const app = Express();
@@ -26,14 +27,12 @@ app.set("view engine", "pug");
 //overwrite views path with pug file path
 app.set("views", "./views");
 
-//import webapi courses.js and use it:
+//import webapi js and use it:
 app.use("/api/courses", courses);
+app.use("/api/genres", genres);
 //import webapi home.js and render homepage:
 app.use("/", home);
 
-//using urlencoded middleware enabled webapi in the body (x-www-form-urlencoded) with key/value pair
-//with extened: true and we can send array or more complex format
-app.use(Express.urlencoded({ extended: true }));
 //http server can access static resource in local directory
 app.use(Express.static("Public"));
 

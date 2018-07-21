@@ -2,9 +2,9 @@ var Connection = require("tedious").Connection;
 var Request = require("tedious").Request;
 
 var config = {
-  userName: "your_username", // update me
-  password: "your_password", // update me
-  server: "localhost"
+  userName: "sa", // update me
+  password: "q1w2e3r4,k.l", // update me
+  server: "ldh7edd"
 };
 
 var connection = new Connection(config);

@@ -13,10 +13,12 @@
     "config": "^1.30.0",
     "debug": "^3.1.0",
     "express": "^4.16.3",
+    "generic-pool": "^3.4.2",
     "helmet": "^3.12.1",
     "joi": "^13.4.0",
     "mongoose": "^5.1.7",
     "morgan": "^1.9.0",
+    "mssql": "^4.1.0",
     "pug": "^2.0.3",
     "tedious": "^2.6.3",
     "underscore": "^1.9.1"

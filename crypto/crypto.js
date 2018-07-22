@@ -1,4 +1,4 @@
-//aes :
+//aes 256 cipher encryption and decryption :
 // var crypto = require("crypto"),
 //   algorithm = "aes-256-ctr",
 //   password = "d6F3Efeq";

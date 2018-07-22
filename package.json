@@ -23,6 +23,7 @@
     "mssql": "^4.1.0",
     "pug": "^2.0.3",
     "qrcode": "^1.2.0",
+    "solidity": "0.0.1",
     "speakeasy": "^2.0.0",
     "tedious": "^2.6.3",
     "underscore": "^1.9.1",

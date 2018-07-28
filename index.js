@@ -62,16 +62,16 @@ const Course = mongoose.model("Course", courseSchema);
 //async function to save mongo db
 async function CreateCourse() {
   const course = new Course({
-    name: "VueJS course",
-    author: "moshi",
-    tag: ["vuejs", "frontend"],
-    isPublish: false
+    name: "solidity course",
+    author: "gerg",
+    tag: ["solidity", "frontend"],
+    isPublish: true
   });
-  //const result = await course.save();
+  const result = await course.save();
   //console.log(result);
 }
 
-//CreateCourse();
+CreateCourse();
 
 async function getCourses() {
   const courses = await Course
@@ -104,7 +104,7 @@ async function getCourses() {
     .sort({ name: -1 }) //sort order acend: 1, descend: -1
     .select({ name: 1, tag: 1 }); //select with multiple columns you want to get
 
-  //console.log(courses);
+  console.log(courses);
 }
 
 //getCourses();
@@ -125,7 +125,7 @@ async function updateCourse(id) {
   */
 
   //second approach Update first
-  //update : will not return updated object
+  //update : will not return updated document
   //   const course = await Course.update(
   //     { _id: id },
   //     {
@@ -135,7 +135,7 @@ async function updateCourse(id) {
   //     }
   //   );
 
-  //findByIdAndUpdate will return original updated object by default without the 3rd parameter {new: true}
+  //findByIdAndUpdate will return original updated document by default without the 3rd parameter {new: true}
   const course = await Course.findByIdAndUpdate(
     { _id: id },
     {
@@ -143,11 +143,25 @@ async function updateCourse(id) {
         isPublish: true
       }
     },
-    { new: true } //if add 3rd parameter {new: true} will return updated object!
+    { new: true } //if add 3rd parameter {new: true} will return updated document!
   );
   return course;
 }
 
-updateCourse("5b5c7ddd87ebca20eff7a251")
-  .then(result => console.log(result))
-  .catch(err => console.log("error : " + err.message));
+// updateCourse("5b5c7ddd87ebca20eff7a251")
+//   .then(result => console.log(result))
+//   .catch(err => console.log("error : " + err.message));
+
+async function removeCourse(id) {
+  //return await Course.deleteOne({_id:id});
+
+  //delete 1st one
+  //Course.deleteOne({isPublish : false});
+  //delete many
+  //Course.deleteMany(id);
+  const deletedCourse = await Course.findByIdAndRemove(id);
+  return deletedCourse;
+  //if specify delete id is not in db, it will return null, otherwise return the document b4 deleted.
+}
+
+removeCourse("5b5cad1c2dfbbb2825fbb8e9").then(result => console.log(result));

@@ -40,3 +40,114 @@
 //   .then(function(val) {
 //     console.log(val, "done");
 //   }); //val是undefined，回傳值消息
+
+const mongoose = require("mongoose");
+//connect mongodb
+mongoose
+  .connect("mongodb://localhost/playground")
+  .then(() => console.log("connected to mongodb"))
+  .catch(err => console.log(err.message));
+
+const courseSchema = new mongoose.Schema({
+  name: String,
+  author: String,
+  tag: [String],
+  date: { type: Date, default: Date.now },
+  isPublish: Boolean
+});
+
+//create Course model
+const Course = mongoose.model("Course", courseSchema);
+
+//async function to save mongo db
+async function CreateCourse() {
+  const course = new Course({
+    name: "VueJS course",
+    author: "moshi",
+    tag: ["vuejs", "frontend"],
+    isPublish: false
+  });
+  //const result = await course.save();
+  //console.log(result);
+}
+
+//CreateCourse();
+
+async function getCourses() {
+  const courses = await Course
+    //gt greater than
+    //eq equal to
+    //gte greater than equal to
+    //lt lesser than
+    //lte lesser than equal to
+    //in in
+    //nin not in
+    //.find({price: {$gte:10, $lte:20 } })
+    //.find({price: {$in [10,20,30]} })
+
+    //logical operators
+    //and
+    //or
+    //.find().and([{ author:'jackson' },{ isPublish: true }])
+    //.find().or([{ author: 'jackson' },{ isPublish: true }])
+
+    //regular expression
+    //start with...
+    //.find({author: /^jackson/})
+    //end with...
+    //.find({author: /jackson$/})
+    //contains .*
+    //.find({author: /.*jackson.*/i}) //i means InCase-Sensitive;
+
+    .find({ author: "jackson", isPublish: true }) //filter (where?)
+    .limit(10) //show how many records
+    .sort({ name: -1 }) //sort order acend: 1, descend: -1
+    .select({ name: 1, tag: 1 }); //select with multiple columns you want to get
+
+  //console.log(courses);
+}
+
+//getCourses();
+
+async function updateCourse(id) {
+  /* first approach Query first
+  const course = await Course.findById(id);
+  //course not found
+  if (!course) return;
+
+  course.set({
+    isPublish: false,
+    author: "jake"
+  });
+
+  course.save();
+  return course;
+  */
+
+  //second approach Update first
+  //update : will not return updated object
+  //   const course = await Course.update(
+  //     { _id: id },
+  //     {
+  //       $set: {
+  //         isPublish: true
+  //       }
+  //     }
+  //   );
+
+  //findByIdAndUpdate will return original updated object by default without the 3rd parameter {new: true}
+  const course = await Course.findByIdAndUpdate(
+    { _id: id },
+    {
+      $set: {
+        isPublish: true
+      }
+    },
+    { new: true } //if add 3rd parameter {new: true} will return updated object!
+  );
+  return course;
+}
+
+updateCourse("5b5c7ddd87ebca20eff7a251")
+  .then(result => console.log(result))
+  .catch(err => console.log("error : " + err.message));

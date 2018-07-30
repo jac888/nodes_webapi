@@ -49,7 +49,7 @@ mongoose
   .catch(err => console.log(err.message));
 
 const courseSchema = new mongoose.Schema({
-  name: String,
+  name: { type: String, required: true },
   author: String,
   tag: [String],
   date: { type: Date, default: Date.now },
@@ -58,20 +58,28 @@ const courseSchema = new mongoose.Schema({
 
 //create Course model
 const Course = mongoose.model("Course", courseSchema);
+//for git add . again
 
 //async function to save mongo db
 async function CreateCourse() {
   const course = new Course({
-    name: "solidity course",
+    name: "solidity course five",
     author: "gerg",
     tag: ["solidity", "frontend"],
     isPublish: true
   });
   const result = await course.save();
-  //console.log(result);
+  console.log(result);
 }
 
-CreateCourse();
+CreateCourse()
+  .then(result => {
+    //cant display document outside CreateCourse() function
+    //console.log(result);
+  })
+  .catch(err => {
+    console.log("error: " + err.message);
+  });
 
 async function getCourses() {
   const courses = await Course
@@ -164,4 +172,4 @@ async function removeCourse(id) {
   //if specify delete id is not in db, it will return null, otherwise return the document b4 deleted.
 }
 
-removeCourse("5b5cad1c2dfbbb2825fbb8e9").then(result => console.log(result));
+//removeCourse("5b5cad1c2dfbbb2825fbb8e9").then(result => console.log(result));

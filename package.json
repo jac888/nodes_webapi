@@ -10,26 +10,32 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ajv-keywords": "^3.2.0",
     "ba64": "^3.0.9",
-    "config": "^1.30.0",
+    "coffeescript": "^2.3.1",
+    "config": "^2.0.1",
     "debug": "^3.1.0",
+    "edge": "^7.10.1",
     "express": "^4.16.3",
     "generic-pool": "^3.4.2",
-    "helmet": "^3.12.1",
-    "joi": "^13.4.0",
+    "helmet": "^3.13.0",
+    "joi": "^13.5.2",
     "mkdirp": "^0.5.1",
-    "mongoose": "^5.1.7",
+    "mon": "0.0.8",
+    "mongodb": "^3.1.1",
+    "mongoose": "^5.2.6",
     "morgan": "^1.9.0",
-    "mssql": "^4.1.0",
+    "mssql": "^4.2.0",
     "pug": "^2.0.3",
-    "qrcode": "^1.2.0",
+    "qrcode": "^1.2.2",
     "solidity": "0.0.1",
     "speakeasy": "^2.0.0",
-    "tedious": "^2.6.3",
+    "strscan": "^1.0.1",
+    "tedious": "^2.7.0",
     "underscore": "^1.9.1",
-    "web3": "^0.20.3"
+    "web3": "^1.0.0-beta.35"
   },
   "devDependencies": {
-    "jshint": "^2.9.5"
+    "jshint": "^2.9.6"
   }
 }

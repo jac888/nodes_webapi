@@ -39,8 +39,21 @@
 
 //   connection.execSql(request);
 // }
-
+//var edge = require("edge");
 const mssql = require("mssql");
+const express = require("express");
+
+// var getDAC = edge.func({
+//   assemblyFile: "//dlls/Common.dll",
+//   typeName: "WEB.DAC_工會1",
+//   methodName: "testDLL"
+// });
+// var input = [];
+
+// getDAC(input, function(err, result) {
+//   if (err) throw err;
+//   console.log(result);
+// });
 
 var dbConfig = {
   server: "LDH7EDD\\SQLEXPRESS",
@@ -50,7 +63,7 @@ var dbConfig = {
   port: 5555
 };
 
-function getEmp() {
+function getUnion() {
   var conn = new mssql.ConnectionPool(dbConfig);
 
   conn
@@ -91,4 +104,4 @@ function getEmp() {
   //});
 }
 
-getEmp();
+getUnion();

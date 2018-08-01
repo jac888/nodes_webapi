@@ -49,7 +49,13 @@ mongoose
   .catch(err => console.log(err.message));
 
 const courseSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  name: {
+    type: String,
+    required: true,
+    uppercase: true,
+    loadClass: false,
+    trim: true
+  },
   category: {
     type: String,
     required: true,
@@ -64,20 +70,26 @@ const courseSchema = new mongoose.Schema({
       isAsync: true,
       validator: function(v, callback) {
         setTimeout(() => {
-          const result = v && v.length > 2;
+          const result = v && v.length > 0;
           callback(result);
-        }, 5000);
+        }, 1000);
       },
       message: "length < 2"
     }
   },
   date: { type: Date, default: Date.now },
-  isPublish: Boolean
+  isPublish: Boolean,
+  price: {
+    type: Number,
+    min: 10,
+    max: 200,
+    set: v => Math.round(v),
+    get: v => Math.round(v)
+  }
 });
 
 //create Course model
 const Course = mongoose.model("Course", courseSchema);
-//for git add . again
 
 //async function to save mongo db
 async function CreateCourse() {
@@ -85,15 +97,16 @@ async function CreateCourse() {
     name: "solidity course five",
     category: "web",
     author: "gerg",
-    tag: null, //if null validator have to check object has value
-    isPublish: true
+    tag: ["testtage"], //if null validator have to check object has value
+    isPublish: true,
+    price: 12.31
   });
 
   try {
     const result = await course.save();
     console.log(result);
   } catch (ex) {
-    // console.log(ex.message);
+    console.log(ex.message);
     // console.log(ex.errors.tag);
     for (field in ex.errors) {
       console.log(ex.errors[field].message);
@@ -104,16 +117,18 @@ async function CreateCourse() {
   }
 }
 
-CreateCourse()
-  .then(result => {
-    //cant display document outside CreateCourse() function
-    //console.log(result);
-  })
-  .catch(err => {
-    console.log("error: " + err.message);
-  });
+// CreateCourse()
+//   .then(result => {
+//     //cant display document outside CreateCourse() function
+//     //console.log(result);
+//   })
+//   .catch(err => {
+//     console.log("error: " + err.message);
+//   });
 
 async function getCourses() {
+  const pageNumber = 2;
+  const pageSize = 10;
   const courses = await Course
     //gt greater than
     //eq equal to
@@ -138,16 +153,17 @@ async function getCourses() {
     //.find({author: /jackson$/})
     //contains .*
     //.find({author: /.*jackson.*/i}) //i means InCase-Sensitive;
-
-    .find({ author: "jackson", isPublish: true }) //filter (where?)
-    .limit(10) //show how many records
+    .find({ _id: "5b6124034856c11a036a075d" })
+    // .find({ author: "jackson", isPublish: true }) //filter (where?)
+    // //.skip((pageNumber - 1) * pageSize) //for page size
+    // .limit(10) //show how many records
     .sort({ name: -1 }) //sort order acend: 1, descend: -1
-    .select({ name: 1, tag: 1 }); //select with multiple columns you want to get
+    .select({ name: 1, tag: 1, price: 1 }); //select with multiple columns you want to get
 
-  console.log(courses);
+  console.log(courses[0].price); //if price set/get is set, price here will show as getter's function's value
 }
 
-//getCourses();
+getCourses();
 
 async function updateCourse(id) {
   /* first approach Query first

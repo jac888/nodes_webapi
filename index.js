@@ -50,8 +50,27 @@ mongoose
 
 const courseSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  category: {
+    type: String,
+    required: true,
+    enum: ["web", "mmobile", "network"]
+  },
   author: String,
-  tag: [String],
+  tag: {
+    type: Array,
+    validate: {
+      //custom validator
+      //with async
+      isAsync: true,
+      validator: function(v, callback) {
+        setTimeout(() => {
+          const result = v && v.length > 2;
+          callback(result);
+        }, 5000);
+      },
+      message: "length < 2"
+    }
+  },
   date: { type: Date, default: Date.now },
   isPublish: Boolean
 });
@@ -64,12 +83,25 @@ const Course = mongoose.model("Course", courseSchema);
 async function CreateCourse() {
   const course = new Course({
     name: "solidity course five",
+    category: "web",
     author: "gerg",
-    tag: ["solidity", "frontend"],
+    tag: null, //if null validator have to check object has value
     isPublish: true
   });
-  const result = await course.save();
-  console.log(result);
+
+  try {
+    const result = await course.save();
+    console.log(result);
+  } catch (ex) {
+    // console.log(ex.message);
+    // console.log(ex.errors.tag);
+    for (field in ex.errors) {
+      console.log(ex.errors[field].message);
+      console.log(ex.errors[field].value);
+      console.log(ex.errors[field].kind);
+      //console.log(ex.errors[field].properties.isAsync);
+    }
+  }
 }
 
 CreateCourse()
